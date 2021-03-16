@@ -222,6 +222,38 @@ class DifferenceCompositor(CompositeBase):
         return proj
 
 
+class RatioCompositor(CompositeBase):
+    """Make the ratio of two data arrays."""
+
+    def __call__(self, projectables, nonprojectables=None, **info):
+        """Generate the composite."""
+        if len(projectables) != 2:
+            raise ValueError("Expected 2 datasets, got %d" % (len(projectables),))
+        projectables = self.match_data_arrays(projectables)
+        info = combine_metadata(*projectables)
+        info['name'] = self.attrs['name']
+
+        proj = projectables[0] / projectables[1]
+        proj.attrs = info
+        return proj
+
+
+class SumCompositor(CompositeBase):
+    """Make the sum of two data arrays."""
+
+    def __call__(self, projectables, nonprojectables=None, **info):
+        """Generate the composite."""
+        if len(projectables) != 2:
+            raise ValueError("Expected 2 datasets, got %d" % (len(projectables),))
+        projectables = self.match_data_arrays(projectables)
+        info = combine_metadata(*projectables)
+        info['name'] = self.attrs['name']
+
+        proj = projectables[0] + projectables[1]
+        proj.attrs = info
+        return proj
+
+
 class SingleBandCompositor(CompositeBase):
     """Basic single-band composite builder.
 
